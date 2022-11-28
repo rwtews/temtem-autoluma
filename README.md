@@ -10,7 +10,8 @@ Project in [AutoKey](https://www.autohotkey.com/) in order to create an automati
 
 # Usage instructions 
 
-- Download and start *AutoLuma.exe*
+- Download and decompress [AutoLuma.zip](https://github.com/rwtews/temtem-autoluma/releases/tag/current)
+- Start **AutoLuma.exe**
 - Use `*` key for start script
 - Use `-` key for stop script
 - Use `/` key for show number of battles found.
