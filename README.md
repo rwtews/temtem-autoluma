@@ -1,5 +1,7 @@
 # AutoLuma
 
+*Author: [rwtews](https://github.com/rwtews)*
+
 Project in [AutoKey](https://www.autohotkey.com/) in order to create an automatic method for the search and detection of lumas in TemTem.
 
 ## Development requirements
@@ -13,3 +15,5 @@ Project in [AutoKey](https://www.autohotkey.com/) in order to create an automati
 - Use `-` key for stop script
 - Use `/` key for show number of battles found.
 - Use `0` key force exit script.
+
+Code based on [TacticalCheeze](https://www.unknowncheats.me/forum/members/2133499.html) post in [foro](https://www.unknowncheats.me/forum/other-mmorpg-and-strategy/410475-temtem-auto-luma-farmer-temtem-auto-xp-farmer.html)
