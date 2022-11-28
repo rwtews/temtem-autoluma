@@ -1,49 +1,75 @@
-﻿-::
-  $stop := 0
-  $sleep := 500
-
-  monster1 := [[1260, 1340], 52]
-  monster2 := [[1660, 1740], 105]
+﻿*:: 
+  global $stop := 0
+  global $sleep := 500
+  global battles := 0
 
   CoordMode, pixel,screen
   CoordMode, mouse,screen
 
-  test(arrX, y){
-    MouseClick, , arrX[1], y
-    Sleep 500
-    MouseClick, , arrX[2], y
-    Sleep 500
-  }
+  autoWalk() {
+    sleepWalk := 30
+    Loop { 
+      if !isBattle() {
+        Random, rand, 1, 4
+        Random, randMove, 1, 8
+        Loop, %randMove% {
+          if !isBattle() {
+            Random, randStop, 1, 15
+            IfEqual, randStop, 1, Sleep 100
 
-  Walk(ByRef key) {
-    Send { %key% down }{ %key% up }
-    Send { %key% down }
-    Sleep 50
-    Send { %key% up }
+            switch rand {
+            case 1:
+              Send {a down} 
+              Sleep sleepWalk
+              Send {a up}
+              Break
+            case 2:
+              Send {w down}
+              Sleep sleepWalk 
+              Send {w up}
+              Break
+            case 3:
+              Send {d down}
+              Sleep sleepWalk 
+              Send {d up}
+              Break
+            case 4:
+              Send {s down}
+              Sleep sleepWalk 
+              Send {s up}
+              Break
+            }
+          } else {
+            MouseClick,, 970, 900,
+            Break
+          }
+        } 
+      }
+      if ($stop) {
+        return 
+      }
+      Break
+    }
   }
 
   findMonster(arrX, y) {
-    $newY := y + 3
-    PixelSearch, Px, Py, arrX[1], $newY, arrX[2], $newY, 0x1e1e1e, 1, Fast RGB
+    newY := y + 2
+    PixelSearch, Px, Py, arrX[1], y, arrX[2], newY, 0x1e1e1e, 1, Fast RGB
     if ErrorLevel {
       return false
     }
     return true
   }
 
-  scanLuma(ByRef stop, arrX, y, m) {
-    Sleep $sleep
-    Loop {
-      PixelSearch, Px, Py, arrX[0], y, arrX[1], y, 0xfefefe, 1, Fast RGB
+  scanLuma(arrX, y, m) {
+    PixelSearch, Px1, Py1, arrX[1], y, arrX[2], y, 0xffffff, 1, Fast RGB
+    if !ErrorLevel {
+      Sleep $sleep
+
+      PixelSearch, Px2, Py2, arrX[1], y, arrX[2], y, 0xfefefe, 1, Fast RGB
       if !ErrorLevel {
-        MsgBox, % m
-        stop := 1
-      }
-      if (stop) {
-        return
-      }
-      else {
-        Break
+        MsgBox, % m "\n Number of battles found: " battles
+        $stop := 1
       }
     }
   }
@@ -53,33 +79,24 @@
     MouseClick, Left, 970, 900, 1
     Sleep 500
     MouseClick, Left, 970, 900, 1
+    Sleep 3000
   }
 
   isBattle() {
-    ; Busca la caja de vida de el temtem aliado #2
-    PixelSearch, Px, Py, 460, 800, 500, 800, 0x1e1e1e, 0, Fast RGB
-    if !ErrorLevel {
-      $interfaceBattle := true
-    } else {
-      $interfaceBattle := false
-    }
-
-    ; Escanea la patalla entera busncado un color
     PixelSearch, Px, Py, 0, 0, 1920, 150, 0x3ce8ea, 0, Fast RGB
     if !ErrorLevel {
-      $scanScreen := false
-    } else {
-      $scanScreen := true
+      return false
     }
-
-    return $scanScreen and $interfaceBattle
+    return true
   }
 
-  Loop {
-    if isBattle() {
-      Sleep 10000
+  inBattle() {
+    monster1 := [[1260, 1340], 52]
+    monster2 := [[1660, 1740], 106]
+
+    Loop {
       Loop, 2 {
-        Sleep 1000
+        Sleep 2000
         if ($stop) {
           return
         }
@@ -88,30 +105,41 @@
         existMonster2 := findMonster(monster2[1], monster2[2])
 
         if existMonster1 or existMonster2 {
+          battles := battles + 1
           if existMonster1 {
-            scanLuma($stop, monster1[1], monster1[2], "Luma Found on top")
+            scanLuma(monster1[1], monster1[2], "Luma Found on top")
           }
           if existMonster2 {
-            scanLuma($stop, monster2[1], monster2[2], "Luma Found on bottom")
+            scanLuma(monster2[1], monster2[2], "Luma Found on bottom")
           }
           if ($stop) {
             return
           }
           exitBattle()
+          return
+        } else {
+          Sleep 6000
+          return
         }
       }
       if ($stop) {
         return
       }
-    } else {
-      Walk(a)
-      Walk(w)
-      Walk(d)
-      Walk(s)
+    }
+  }
+
+  Loop {
+    if isBattle() {
+      inBattle()
+    }
+    else {
+      autoWalk()
     }
     if ($stop) {
       return
     }
   }
 
-  .:: $stop := 1
+  -:: $stop := 1
+  /:: MsgBox, % "Number of battles found: " battles
+  0:: ExitApp
