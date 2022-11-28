@@ -16,4 +16,4 @@ Project in [AutoKey](https://www.autohotkey.com/) in order to create an automati
 - Use `/` key for show number of battles found.
 - Use `0` key force exit script.
 
-Code based on [TacticalCheeze](https://www.unknowncheats.me/forum/members/2133499.html) post in [foro](https://www.unknowncheats.me/forum/other-mmorpg-and-strategy/410475-temtem-auto-luma-farmer-temtem-auto-xp-farmer.html)
+Code based on [TacticalCheeze](https://www.unknowncheats.me/forum/members/2133499.html) post in [foro](https://www.unknowncheats.me/forum/other-mmorpg-and-strategy/410475-temtem-auto-luma-farmer-temtem-auto-xp-farmer.html) https://www.unknowncheats.me/forum/other-mmorpg-and-strategy/410475-temtem-auto-luma-farmer-temtem-auto-xp-farmer.html
